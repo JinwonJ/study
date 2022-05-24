@@ -1,0 +1,125 @@
+body{
+    margin: 0;
+}
+.main{
+    background-color: #efefef;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    /* border-top: 1px solid #4a4a4a; */
+    height: auto;
+    width: 100vw;
+}
+.card{
+    border: 1px solid #c7c7c7;
+    background-color: #fafafa;
+    width: 600px;
+    height: auto;
+    margin: 20px;
+}
+header img{
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    border: 1px solid #efefef;
+    margin: 10px;
+}
+.card_image img{
+    width: 100%;
+}
+.user_id{
+    display: inline;
+}
+.user_img img{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    border: 1px solid #efefef;
+    margin: 10px;
+}
+.three_dots_btn{
+    position: absolute;
+    display: inline;
+    margin-left: 420px;
+}
+/* modal */
+.modal {
+    text-align: center;
+}
+@media screen and (min-width: 768px) {
+    .modal:before {
+            display: inline-block;
+            vertical-align: middle;
+            content: " ";
+            height: 100%;
+    }
+}
+.modal-dialog {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+/* Modal 삭제, 수정, 삭제 버튼 */
+.close{
+    margin-left: 15px;
+}
+#modify_btn{
+    display: inline-block;
+    margin-bottom: 10px;
+}
+#delete_btn{
+    display: block;
+}
+.content{
+    margin: 15px;
+}
+/* hashtag */
+.hashtag{
+    color: blue;
+}
+.info{
+    display: flex;
+    justify-content: space-between;
+}
+.info i{
+    font-size: 1.5rem;
+}
+.like_time{
+    display: flex;
+    justify-content: space-between;
+}
+.like_number{
+    margin-left: 15px;
+
+}
+.like_number p{
+    font-weight: bolder;
+    display: inline-block;
+}
+.upload_time{
+   margin-right: 15px;
+}
+.upload_time p{
+    font-weight: bolder;
+    display: inline-block;
+}
+.comment{
+    margin: 0rem 1rem 1rem 1rem;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 1rem;
+}
+.comment_form form{
+    padding-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+}
+.comment_form form input{
+    width: 550px;
+    height: 30px;
+    border: none;
+    padding-left: 10px;
+}
+.comment_form form #submit{
+    border: none;
+    background-color: white;
+}

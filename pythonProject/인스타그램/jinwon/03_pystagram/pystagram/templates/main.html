@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  <!-- Fontawesome 적용 -->
+  <script src="https://kit.fontawesome.com/0b02921f0e.js" crossorigin="anonymous"></script>
+{% endblock head %}
+
+{% block title %}
+메인페이지 | Pystagram
+{% endblock title %}
+
+{% block _nav %}
+    {% include '_nav.html' %}
+{% endblock _nav %}
+
+{% block body %}
+
+{% if messages %}
+    <div >
+        {% for message in messages %}
+            {{ message.tags }}! {{ message.message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<div class="main">
+    <div class="main_left">
+        {% for post in posts %}
+        <section class="card_section">
+            <div class="card">
+                <header>
+                    {% if post.postUser.profile_img_src == '' %}
+                    <img src="{% static 'images/login.png' %}" alt="test">
+                    {% else %}
+                    <img src="{{ post.postUser.profile_img_src }}" alt="test">
+                    {% endif %}
+                    <div class="user_id"><a href="{% url 'pystagram:pn_post_list' post.user_id %}">{{ post.user_id }}</a></div>
+                </header>
+                <div class="card_image">
+                    <img src="{{ post.post_img_url }}" alt="test">
+                    <p>{{ post.content }}</p>
+                    <!-- hashtag -->
+                    <p class="hashtag">
+                        {% for tag in post.hashtags %}
+                        <a href="{% url 'pystagram:pn_search' %}?keyword={{ tag | urlencode }}">{{ tag }}</a>
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="info">
+                    <div class="info_left">
+                        {% if post.like == 0 %}
+                        <i class="far fa-heart" onclick="likePost(this, {{ post.post_id }})"></i>
+                        {% else %}
+                        <i class="fas fa-heart" onclick="unlikePost(this, {{ post.post_id }})"></i>
+                        {% endif %}
+                        <i class="far fa-comment"></i>
+                    </div>
+                    <div class="info_right">
+                        {% if post.bookmark == 0 %}
+                        <i class="far fa-bookmark" onclick="bookmark(this, {{ post.post_id }})"></i>
+                        {% else %}
+                        <i class="fas fa-bookmark" onclick="unbookmark(this, {{ post.post_id }})"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="like_time">
+                    <span class="like_number">
+                        좋아요 <p>{{post.likeCount}}</p>개
+                    </span>
+                    <span class="upload_time">
+                        <p>{{ post.time }}</p>
+                    </span>
+                </div>
+                <a onclick="reset('{{ post.post_id }}', 'http://127.0.0.1:8000/p/');">댓글 보기</a>
+            </div>
+        </section>
+        {% empty %}
+            <p>어서 인스타그램 서비스를 시작해보세요!</p>
+        {% endfor %}
+    </div>
+
+
+    <div class="main_right">
+        <div id="fixed_nav">
+            <div class="card" id="card_right">
+                <div>
+                    <span class="user_img">
+                        {% if user.profile_img_src == '' %}
+                        <img src="{% static 'images/login.png' %}" alt="Image">
+                        {% else %}
+                        <img src="{{ user.profile_img_src }}" alt="Image">
+                        {% endif %}
+                    </span>
+                    <span class="user_name">
+                        <a href="{% url 'pystagram:pn_post_list' user.username %}">{{ user.username }}</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div id="disqus_wrapper">
+            <div id="disqus_thread"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function likePost(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_like_post' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "fas fa-heart");
+                $(elm).attr("onclick", "unlikePost(this, " + n + ")");
+                $(elm).parent().parent().next().children().first().children().text(response.likeCount);
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("좋아요를 반영하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    function unlikePost(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_unlike_post' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "far fa-heart");
+                $(elm).attr("onclick", "likePost(this, " + n + ")");
+                $(elm).parent().parent().next().children().first().children().text(response.likeCount);
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("좋아요 취소를 반영하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    function bookmark(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_bookmark' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "fas fa-bookmark");
+                $(elm).attr("onclick", "unbookmark(this, " + n + ")");
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("컬렉션을 저장하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    function unbookmark(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_unbookmark' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "far fa-bookmark");
+                $(elm).attr("onclick", "bookmark(this, " + n + ")");
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("컬렉션을 삭제하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    $(window).scroll(function(){
+        var scrollTop = $(document).scrollTop();
+        if (scrollTop < 220) {
+            scrollTop = 220;
+        }
+        $("#disqus_wrapper").stop();
+        $("#disqus_wrapper").animate( { "top" : scrollTop });
+    });
+</script>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'pystagram';
+    var disqus_identifier = '1';
+    var disqus_url = 'http://127.0.0.1:8000/p/';
+	var disqus_config = function () {
+	  this.language = "ko";
+	};
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * Disqus Reset Function * * */
+    var reset = function (newIdentifier, newUrl) {
+        DISQUS.reset({
+            reload: true,
+            config: function () {
+                this.page.identifier = newIdentifier;
+                this.page.url = newUrl;
+            }
+        });
+    };
+</script>
+<noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript" rel="nofollow">
+        comments powered by Disqus.
+    </a>
+</noscript>
+{% endblock body %}

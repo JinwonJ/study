@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DKEA</title>
+
+    <style>
+        .productBox {
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Product Detail</h1>
+    <h3>카테고리 >> {{product.c_name}} >> {{product.i_name}}</h3>
+
+        <div class="productBox">
+            <div class="ProductImg">
+                <a href="{{product.link}}">
+                    <img src="{{product.img_src}}" alt="상품 이미지" class="innerImg">
+                </a>
+            </div>
+            <div class="productInfo">
+                <h5>{{product.p_name}}</h5>
+                <p>{{product.price}}원</p>
+            </div>
+        </div>
+
+
+</body>
+</html>

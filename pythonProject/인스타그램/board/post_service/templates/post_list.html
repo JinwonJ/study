@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>제목</th>
+        <th>작성자</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for post in post_list %}
+    <tr>
+        <td>{{post.title}}</td>
+        <td>{{post.author}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% for page in total_page %}
+{% if current_page != page %}
+<a href="?page={{page}}">
+    {% else %}
+    <a>
+        {% endif %}
+        {% if current_page == page %}
+        <span style="font-weight : bold">
+        {% else %}
+        <span>
+        {% endif %}
+        {{page}}
+    </span>
+    </a>
+    {%endfor %}
+</body>
+</html>

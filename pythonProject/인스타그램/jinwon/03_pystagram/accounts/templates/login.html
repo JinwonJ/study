@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/accounts.css' %}">
+{% endblock head %}
+
+{% block title %}
+로그인 | Pystagram
+{% endblock title %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div style="margin-top:100px;">
+            <div class="card">
+                <h4 class="card-header">Login</h4>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img class="" src="{% static 'images/login.png' %}" alt="logo">
+                    </div>
+                    <form class="mt-3" action="{% url 'accounts:pn_login' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="user_id" name="user_id" placeholder="사용자 이름">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="user_pw" name="user_pw" placeholder="비밀번호">
+                        </div>
+                        <button type="submit" class="btn btn-primary">로그인</button>
+                    </form>
+                </div>
+            </div>
+
+            {% if messages %}
+                <div>
+                    {% for message in messages %}
+                        {{ message.tags }}! {{ message.message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="card mt-2">
+                <div class="text-center mt-3">
+                    <p>계정이 없으신가요? <a href="{% url 'accounts:pn_reg_accounts' %}">가입하기</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post_list.css' %}">
+    <!-- Fontawesome 적용 -->
+    <script src="https://kit.fontawesome.com/0b02921f0e.js" crossorigin="anonymous"></script>
+{% endblock head %}
+
+{% block title %}
+{{ postListUser.username }}님의 페이지 | Pystagram
+{% endblock title %}
+
+{% block _nav %}
+    {% include '_nav.html' %}
+{% endblock _nav %}
+
+{% block body %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="FollowingModalScrollable" tabindex="-1" role="dialog" aria-labelledby="FollowingModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="modal-title" id="FollowingModalScrollableTitle">팔로잉</p>
+                <!-- close_btn -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 팔로잉 유저 리스트 -->
+                <div class="following_user_form">
+                    <!-- 프로필사진, 팔로우 아이디, 메세지, 팔로잉, 팔로우 버튼-->
+                    {% for followingUser in followingUsers %}
+                    <div>
+                        <div class="following_info">
+                            <div class="following_user_img">
+                                {% if followingUser.profile_img_src == '' %}
+                                <img src="{% static 'images/login.png' %}" alt="profile_img">
+                                {% else %}
+                                <img src="{{ followingUser.profile_img_src }}" alt="profile_img">
+                                {% endif %}
+                            </div>
+                            <div class="id_message">
+                                <div class="following_id">
+                                    <a href="{% url 'pystagram:pn_post_list' followingUser.username %}">{{ followingUser.username }}</a>
+                                </div>
+                                <div class="following_id_message">{{ followingUser.profile_msg }}</div>
+                            </div>
+                            <div class="following_btn">
+                                {% if user.is_authenticated %}
+                                    {% if user.username != followingUser.username%}
+                                        {% if followingUser.follow == 0 %}
+                                        <button type="button" class="btn btn-primary" onclick='follow(this, {{ followingUser.username }})'>팔로우</button>
+                                        {% elif followingUser.follow == 1 %}
+                                        <button type="button" class="btn btn-light" onclick='unfollow(this, {{ followingUser.username }})'>팔로잉</button>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+
+
+{% if messages %}
+    <div>
+        {% for message in messages %}
+            {{ message.tags }}! {{ message.message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="main">
+    <div class="user_info">
+        <div>
+            <div class="box">
+                <div class="user_img">
+                    {% if postListUser.profile_img_src == '' %}
+                    <img src="{% static 'images/login.png' %}" alt="profile_img">
+                    {% else %}
+                    <img src="{{ postListUser.profile_img_src }}" alt="profile_img">
+                    {% endif %}
+                </div>
+                <div class="info">
+                    <span class="user_id">
+                        <p>{{ postListUser.username }}</p>
+                    </span>
+                    <span class="modify">
+                    {% if postListUser.username == user.username %}
+                        {% if user.is_authenticated %}
+                            <!--프로필편집-->
+                            <a href="{% url 'accounts:pn_accounts_modify' %}"><i class="fas fa-address-card"></i></a>
+                            <!--비밀번호변경-->
+                            <a href="{% url 'accounts:pn_password_modify' %}"><i class="fas fa-key"></i></a>
+                        {% endif %}
+                    {% endif %}
+                </span>
+
+                    <div class="number">
+                        <span class="post_number">
+                            게시글 <p>{{ postCount }}</p>
+                        </span>
+                        <span class="follower_number">
+                            팔로워 <p id="followerCount">{{ followerCount }}</p>
+                        </span>
+                        <span class="follow_number">
+                        <!-- Button trigger modal -->
+                            <a href="#" data-toggle="modal" data-target="#FollowingModalScrollable">
+                            팔로잉 <p>{{ followingCount }}</p>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+
+                <span class="profile_msg">
+                    <p>{{ postListUser.profile_msg }}</p>
+                </span>
+            </div>
+            <div class="button">
+                {% if user.is_authenticated %}
+                    {% if postListUser.username == user.username %}
+                        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'accounts:pn_logout' %}'">로그아웃</button>
+                    {% else %}
+                        {% if follow == 0 %}
+                            <button type="button" class="btn btn-primary" id="follow_btn" onclick="follow(this, '{{ postListUser.username }}')">팔로우</button>
+                        {% elif follow == 1 %}
+                            <button type="button" class="btn btn-light" id="follow_btn" onclick="unfollow(this, '{{ postListUser.username }}')">팔로잉</button>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+    <hr>
+        <!-- 탭 메뉴 게시물/저장됨 -->
+        <div class="user_posts">
+            <nav>
+                <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-post-tab" data-toggle="tab" href="#nav-post" role="tab" aria-controls="nav-post" aria-selected="true">게시글</a>
+                    {% if postListUser.username == user.username %}
+                    <a class="nav-item nav-link" id="nav-save_post-tab" data-toggle="tab" href="#nav-save_post" role="tab" aria-controls="nav-save_post" aria-selected="false">저장됨</a>
+                    {% endif %}
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-post" role="tabpanel" aria-labelledby="nav-post-tab">
+                    {% include 'posts.html' %}
+                </div>
+                <div class="tab-pane fade" id="nav-save_post" role="tabpanel" aria-labelledby="nav-save_post-tab">
+                    {% include 'collection.html' %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function follow(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_follow' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "btn btn-light");
+                $(elm).attr("onclick", "unfollow(this, '" + n + "')");
+                $(elm).text("팔로잉");
+                if ($(elm).attr("id") == "follow_btn") {
+                    $("#followerCount").text(response.followerCount);
+                }
+            },
+            error: function(xhr,status) {
+                alert(xhr + "!!!" + status + "!!!");
+                alert("팔로우를 하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+    function unfollow(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_unfollow' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "btn btn-primary");
+                $(elm).attr("onclick", "follow(this, '" + n + "')");
+                $(elm).text("팔로우");
+                if ($(elm).attr("id") == "follow_btn") {
+                    $("#followerCount").text(response.followerCount);
+                }
+            },
+            error: function(xhr, status) {
+                alert(xhr + "!!!" + status + "!!!");
+                alert("언팔로우 하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+</script>
+{% endblock body %}

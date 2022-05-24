@@ -1,0 +1,19 @@
+.main{
+    background-color: white;
+}
+.container{
+    margin-top: 50px;
+}
+.card{
+    border: 1px solid #c7c7c7;
+    background-color: #fafafa;
+    width:500px;
+    height: auto;
+}
+.profile_img{
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    margin: 10px;
+}

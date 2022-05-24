@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookmark List</title>
+</head>
+<body>
+
+<div>
+    <h1>Bookmark List</h1>
+    <ul>
+        {% for bookmark in bookmarks %}
+            <li><a href="{% url 'bookmark:detail' bookmark.id %}"> {{bookmark}} </a></li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>

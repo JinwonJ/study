@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DKEA</title>
+
+    <style>
+        .productBox {
+            display: inline-block;
+        }
+
+        .innerImg {
+            width: 280px;
+            height: 300px;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Product List</h1>
+    <h3>카테고리 >> {{c_name}} </h3>
+
+        {% for one in products %}
+            <div class="productBox">
+                <div class="productImg">
+                    <a href="{% url 'dkea:detail' one.p_id %}">
+                        <img src="{{one.img_src}}" alt="상품 이미지" class="innerImg">
+                    </a>
+                </div>
+                <div class="productInfo">
+                    <a href="{% url 'dkea:detail' one.p_id %}"><h5>{{one.p_name}}</h5></a>
+                    <p>{{one.price}}원</p>
+                </div>
+            </div>
+        {% endfor %}
+
+
+</body>
+</html>

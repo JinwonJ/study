@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/AppPT/my-app" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Volog/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Volog/vlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django_react/Django-ex/MEMBER_MANAGER/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django_react/Django-ex/music/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django_react/Django_user/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django_react/django-react-todoApp/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/django_react/user/Dserver/djangoreact/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/social/frontend" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/social/frt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/todo-manager/frontend" vcs="Git" />
+  </component>
+</project>

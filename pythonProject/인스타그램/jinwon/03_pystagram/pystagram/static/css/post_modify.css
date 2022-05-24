@@ -1,0 +1,31 @@
+body{
+    margin: 0;
+}
+.main{
+    background-color: #efefef;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    /* border-top: 1px solid #4a4a4a; */
+    height: auto;
+    width: 100vw;
+}
+.card{
+    border: 1px solid #c7c7c7;
+    background-color: #fafafa;
+    width: 600px;
+    height: auto;
+    margin: 20px;
+}
+.post_modify_form{
+    margin: 20px;
+}
+#post_img img{
+    width: 100%;
+}
+#modify_content textarea{
+    width: 100%;
+}
+#modify_hashtag textarea{
+    width: 100%;
+}

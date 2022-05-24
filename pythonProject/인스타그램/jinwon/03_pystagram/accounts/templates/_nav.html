@@ -1,0 +1,29 @@
+{% load static %}  
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/_nav.css' %}">
+{% endblock head %}
+
+<div class="nav_container">
+    <div class="left">
+        <a href="{% url 'pystagram:pn_main' %}" class="insta_logo"><i class="fab fa-instagram"></i><h2>Pystagram</h2></a>
+    </div>
+    <div class="search">
+        <form action="{% url 'pystagram:pn_search' %}" method="GET" enctype="multipart/form-data">
+            <input type="search" name="keyword" placeholder="검색">
+        </form>
+    </div>
+    <div class="right">
+        <a href="{% url 'pystagram:pn_post_upload' %}"><i class="fas fa-camera"></i></a>
+        <a href="#"><i class="far fa-compass"></i></a>
+        <a href="#"><i class="far fa-heart"></i></a>
+        {% if user.is_authenticated %}
+            {% if user.profile_img_src == '' %}
+            <a href="{% url 'pystagram:pn_post_list' user.username %}"><img src="{% static 'images/login.png' %}" alt="profile" class="navUserImg"></a>
+            {% else %}
+            <a href="{% url 'pystagram:pn_post_list' user.username %}"><img src="{{ user.profile_img_src }}" alt="profile" class="navUserImg"></a>
+            {% endif %}
+        {% else %}
+        <a href="{% url 'accounts:pn_login' %}"><i class="far fa-user"></i></a>
+        {% endif %}
+    </div>
+</div>

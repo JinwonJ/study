@@ -1,0 +1,9 @@
+{% for post in collection %}
+    <div class="postBox">
+        <div class="postImg">
+            <a href="{% url 'pystagram:pn_post_detail' post.post_id %}">
+                <img src="{{ post.post_img_url }}" alt="post_img" class="innerImg">
+            </a>
+        </div>
+    </div>
+{% endfor %}

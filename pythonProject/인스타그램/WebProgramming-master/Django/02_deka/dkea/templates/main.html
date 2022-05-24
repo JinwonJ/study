@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DKEA</title>
+</head>
+<body>
+
+    <h1>DKEA</h1>
+    <ul>
+        {% for one in categories %}
+            <button onclick="window.location.href='{% url 'dkea:list' one.c_code %}'">{{one.c_name}}</button>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post_create.css' %}">
+    <!-- Fontawesome 적용 -->
+    <script src="https://kit.fontawesome.com/0b02921f0e.js" crossorigin="anonymous"></script>
+{% endblock head %}
+
+{% block title %}
+포스트 업로드 페이지 | Pystagram
+{% endblock title %}
+
+{% block _nav %}
+    {% include '_nav.html' %}
+{% endblock _nav %}
+
+{% block body %}
+
+{% if messages %}
+    <div >
+        {% for message in messages %}
+            {{ message.tags }}! {{ message.message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="main">
+    <section class="card_section">
+        <div class="card">
+            <form action="{% url 'pystagram:pn_post_upload' %}" method="POST" enctype="multipart/form-data" class="post_create_form">
+            {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="content" rows="10" cols="128" placeholder="문구 입력..."></textarea>
+                </div>
+                <!-- 해시태그 -->
+                <div class="form-group">
+                    <textarea name="hashtag" rows="1" cols="128" placeholder="해시태그 입력..."></textarea>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="postImg" name="postImg" aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="postImg">사진을 선택해주세요.</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">글 올리기</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#postImg').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('.custom-file-label').html(fileName);
+        });
+
+        $('.btn').click(function(e){
+            if ($('#post_img').val() == '') {
+                alert("사진을 선택해주세요.");
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock body %}

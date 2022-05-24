@@ -1,0 +1,120 @@
+body{
+    margin: 0;
+}
+.main{
+    background-color: #efefef;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    /* border-top: 1px solid #4a4a4a; */
+    height: auto;
+    width: 100vw;
+}
+/* main_left - 사진,댓글 */
+.main_left{
+    margin: 1rem;
+    /* overflow: auto; */
+}
+.card{
+    border: 1px solid #c7c7c7;
+    background-color: #fafafa;
+    width: 600px;
+    height: auto;
+    margin: 20px;
+}
+.card_image img{
+    width: 100%;
+}
+header img{
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    border: 1px solid #efefef;
+    margin: 10px;
+}
+.user_id{
+    display: inline;
+}
+.content{
+    margin: 15px;
+}
+/* hashtag */
+.hashtag{
+    color: blue;
+}
+.info{
+    display: flex;
+    justify-content: space-between;
+}
+.info i{
+    font-size: 1.5rem;
+}
+.like_time{
+    display: flex;
+    justify-content: space-between;
+}
+.like_number{
+    margin-left: 15px;
+
+}
+.like_number p{
+    font-weight: bolder;
+    display: inline-block;
+}
+.upload_time{
+   margin-right: 15px;
+}
+.upload_time p{
+    font-weight: bolder;
+    display: inline-block;
+}
+.comment{
+    margin: 0rem 1rem 1rem 1rem;
+    border-bottom: 1px solid #efefef;
+    padding-bottom: 1rem;
+}
+.comment_form form{
+    padding-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+}
+.comment_form form input{
+    width: 550px;
+    height: 30px;
+    border: none;
+    padding-left: 10px;
+}
+.comment_form form #submit{
+    border: none;
+    background-color: white;
+}
+/* main_right - 로그인한사용자 프로필이미지, 아이디 */
+.main_right{
+    margin-top: 1rem;
+    /* overflow: auto; */
+}
+.main_right #fixed_nav{
+    position: inherit;
+    z-index: 1;
+}
+#card_right{
+    border: 1px solid #c7c7c7;
+    background-color: #fafafa;
+    width: 250px;
+    height: 72px;
+}
+.user_img img{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    border: 1px solid #efefef;
+    margin: 10px;
+}
+.user_name{
+    text-align: center;
+}
+#disqus_wrapper{
+    position: absolute;
+    top: 220px;
+    width: 300px
+}

@@ -1,0 +1,170 @@
+.main{
+    background-color: #efefef;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    /* border-top: 1px solid #4a4a4a; */
+    height: auto;
+    width: 100vw;
+}
+/* 사용자 프로필사진,아이디,정보수정버튼,로그아웃버튼,팔로우버튼*/
+.user_info{
+    display: block;
+    justify-content: space-between;
+    margin: 1rem 1rem 1rem 1rem;
+    align-items: flex-end;
+    width: 880px;
+    height: auto;
+}
+.box{
+    /* text-align: center; */
+    padding-right: 9rem;
+    padding-left: 9rem;
+}
+.user_img {
+    display: inline-block;
+}
+.user_img img{
+    border-radius: 50%;
+    height: 130px;
+    width: 130px;
+    border: 1px solid #efefef;
+    margin: 10px;
+    margin-top: 30px;
+}
+.info{
+    display: inline-block;
+    justify-content: space-between;
+}
+.user_id{
+    display: inline-block;
+    margin-left: 20px;
+}
+.user_id p{
+    font-size: x-large;
+    /* font-weight: bolder; */
+}
+.modify{
+    display: inline-block;
+    margin-left: 50px;
+}
+.number{
+    text-align: center;
+}
+.post_number{
+    display: inline-block;
+    margin-left: 50px;
+}
+.post_number p{
+    font-weight: bolder;
+}
+.follower_number{
+    display: inline-block;
+    margin-left: 50px;
+}
+.follower_number p{
+    font-weight: bolder;
+}
+.follow_number{
+    display: inline-block;
+    margin-left: 50px;
+}
+.follow_number p{
+    font-weight: bolder;
+}
+/* Modal */
+.modal-header{
+    display: inline;
+    text-align: center;
+}
+.modal-title{
+    display: inline;
+    justify-content: center;
+}
+.modal-header p{
+    display: inline;
+    margin-inline-start: 2rem;
+    font-weight: bolder;
+    font-size: 16px;
+}
+.modal-header .close {
+    padding: 0.5rem 1rem;
+}
+.close{
+    font-size: 2rem;
+}
+.following_user_form{
+    /* border: 1px solid #e4e4e4; */
+    height: auto;
+    padding: 5px;
+}
+.following_user_img{
+    text-align: left;
+}
+.following_user_img img{
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    border: 1px solid #efefef;
+    margin: 12px;
+}
+.following_info{
+    display: flex;
+    flex: auto;
+}
+.id_message{
+    margin: 5px;
+    display: block;
+    padding-right: 135px;
+}
+.following_id{
+    display: block;
+    font-weight: bolder;
+    margin-bottom: 0.2rem;
+}
+.following_id_message{
+    display: block;
+    color: #999;
+    margin-bottom: 0.2rem;
+    /* 글자수 제한 ... 으로 보이게 하는 부분 */
+    width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.following_btn{
+    display: inline-flex;
+    margin: 10px 10px 10px 0;
+}
+/**/
+.profile_msg{
+    display: block;
+    text-align: center;
+}
+.profile_msg{
+    font-weight: bolder;
+}
+.button{
+    display: block;
+    text-align: end;
+}
+#follow_btn{
+    margin-right: 10px;
+}
+#unfollow_btn{
+    margin-right: 10px;
+}
+/* user_posts */
+.postBox{
+    display: inline-block;
+}
+.innerImg{
+    width: 250px;
+    height: 250px;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#modify_btn{
+    margin-right: 10px;
+}

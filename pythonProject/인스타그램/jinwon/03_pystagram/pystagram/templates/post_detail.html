@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post_detail.css' %}">
+    <!-- Fontawesome 적용 -->
+    <script src="https://kit.fontawesome.com/0b02921f0e.js" crossorigin="anonymous"></script>
+{% endblock head %}
+
+{% block title %}
+포스트 상세페이지 | Pystagram
+{% endblock title %}
+
+{% block _nav %}
+    {% include '_nav.html' %}
+{% endblock _nav %}
+
+{% block body %}
+
+<!-- Modal -->
+<div class="modal fade" id="postEditModal" tabindex="-1" role="dialog" aria-labelledby="postEditModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="modify_btn" onclick="location.href='{% url 'pystagram:pn_post_modify' post.post_id %}'">포스트 수정</button>
+            <button type="button" class="btn btn-secondary" id="delete_btn" onclick="deleteConfirm({{ post.post_id }})">포스트 삭제</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Modal End-->
+
+{% if messages %}
+    <div>
+        {% for message in messages %}
+            {{ message.tags }}! {{ message.message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="main">
+    <div class="main_left">
+        <section class="card_section">
+            <div class="card">
+                <header>
+                    {% if postDetailUser.profile_img_src == '' %}
+                    <img src="{% static 'images/login.png' %}" alt="test">
+                    {% else %}
+                    <img src="{{ postDetailUser.profile_img_src }}" alt="test">
+                    {% endif %}
+                    <div class="user_id">
+                        <a href="{% url 'pystagram:pn_post_list' postDetailUser.username %}">
+                            {{ postDetailUser.username }}
+                        </a>
+                    </div>
+                    {% if postDetailUser == user %}
+                        <div class="three_dots_btn">
+                            <!-- Button trigger modal -->
+                            <a href="#" data-toggle="modal" data-target="#postEditModal">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </header>
+                <div class="card_image">
+                    <img src="{{post.post_img_url}}" alt="Image">
+                    <p>{{post.content}}</p>
+                    <!-- hashtag -->
+                    <p class="hashtag">
+                        {% for tag in post.hashtags %}
+                        <a href="{% url 'pystagram:pn_search' %}?keyword={{ tag | urlencode }}">{{ tag }}</a>
+                        {% endfor %}
+                    </p>
+                </div>
+                <div class="info">
+                    <div class="info_left">
+                        {% if post.like == 0 %}
+                        <i class="fa-heart far" onclick="likePost(this, {{ post.post_id }})"></i>
+                        {% else %}
+                        <i class="fa-heart fas" onclick="unlikePost(this, {{ post.post_id }})"></i>
+                        {% endif %}
+                        <i class="far fa-comment"></i>
+                        <!--<i class="fas fa-upload"></i>-->
+                    </div>
+                    <div class="info_right">
+                        {% if post.bookmark == 0 %}
+                        <i class="fa-bookmark far" onclick="bookmark(this, {{ post.post_id }})"></i>
+                        {% else %}
+                        <i class="fa-bookmark fas" onclick="unbookmark(this, {{ post.post_id }})"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="like_time">
+                    <span class="like_number">
+                        좋아요 <p id="likeCount">{{post.likeCount}}</p>개
+                    </span>
+                    <span class="upload_time">
+                        <p>{{ post.time }}</p>
+                    </span>
+                </div>
+                <div id="disqus_thread"></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    // 포스트 삭제 전 확인 질문
+    function deleteConfirm(n) {
+        if (confirm("이 포스트를 삭제하시겠습니까?")) {
+            window.location.href = "/p/delete/" + n;
+        } else {
+            return false;
+        }
+    }
+
+
+    function likePost(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_like_post' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "fas fa-heart");
+                $(elm).attr("onclick", "unlikePost(this, " + n + ")");
+                $("#likeCount").text(response.likeCount);
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("좋아요를 반영하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    function unlikePost(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_unlike_post' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "far fa-heart");
+                $(elm).attr("onclick", "likePost(this, " + n + ")");
+                $("#likeCount").text(response.likeCount);
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("좋아요 취소를 반영하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    function bookmark(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_bookmark' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "fas fa-bookmark");
+                $(elm).attr("onclick", "unbookmark(this, " + n + ")");
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("컬렉션을 저장하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+
+
+    function unbookmark(elm, n) {
+        $.ajax({
+            url: "{% url 'pystagram:pn_unbookmark' 1 %}".replace('1', n),
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            type: "POST",
+            success: function(response) {
+                $(elm).attr("class", "far fa-bookmark");
+                $(elm).attr("onclick", "bookmark(this, " + n + ")");
+            },
+            error: function(xhr, status) {
+                alert(status + "!!!");
+                alert("컬렉션을 삭제하는 과정에서 에러가 발생했습니다.");
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT
+     *  THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR
+     *  PLATFORM OR CMS.
+     *
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT:
+     *  https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function () {
+        this.page.url = "http://127.0.0.1:8000/p/{{ post.post_id }}/";
+        this.page.identifier = "{{ post.post_id }}";
+        this.language = "ko";
+    };
+
+
+    (function() {  // REQUIRED CONFIGURATION VARIABLE: EDIT THE SHORTNAME BELOW
+        var d = document, s = d.createElement('script');
+
+        // IMPORTANT: Replace EXAMPLE with your forum shortname!
+        s.src = 'https://pystagram.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>
+    Please enable JavaScript to view the
+    <a href="https://disqus.com/?ref_noscript" rel="nofollow">
+        comments powered by Disqus.
+    </a>
+</noscript>
+{% endblock body %}
